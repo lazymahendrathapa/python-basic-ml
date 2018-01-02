@@ -19,7 +19,7 @@ def calculate_cost(X, y, theta):
 
 def gradient_descent(X, y, alpha, iteration_number):
 
-    theta = np.random.random([X.shape[1], 1]) 
+    theta = np.zeros([X.shape[1], 1]) 
     m = y.size #number of training examples
     
     for i in range(iteration_number):
@@ -34,7 +34,7 @@ def gradient_descent(X, y, alpha, iteration_number):
 
 def main():
     X, y = load_dataset()
-    theta = gradient_descent(X, y, 0.05, 1000)
+    theta = gradient_descent(X, y, 0.01, 1000)
     print("Theta's: \n{}".format(theta))
 
 if __name__ == "__main__":
