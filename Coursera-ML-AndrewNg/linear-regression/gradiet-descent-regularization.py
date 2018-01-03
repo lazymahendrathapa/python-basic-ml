@@ -21,31 +21,39 @@ def feature_standardization(X):
 def calculate_output(X, theta):
     return X.dot(theta)
 
-def calculate_cost(X,y, theta):
+def calculate_cost(X,y, theta, lambda_):
     m = y.size
     output = calculate_output(X, theta)
-    return np.sum(np.square(output - y)) / (2 * m)
+    
+    error = np.sum(np.square(output - y))
+    regularize_term = lambda_ * np.sum(np.square(theta[1:]))
 
-def gradient_descent(X, y, alpha, iteration_number):
+    return (error + regularize_term) / (2 * m)
+
+def gradient_descent(X, y, alpha, iteration_number, lambda_):
 
     theta = np.zeros([X.shape[1],1])
     m = y.size
 
     for i in range(iteration_number):
         output = calculate_output(X,theta)
-        theta = theta - ((alpha / m) * (np.dot(X.T, (output - y))))
+        sum_ = np.dot(X.T, (output - y))
+
+        temp = np.array(theta)
+        temp[0] = 0
+
+        theta = theta - (alpha / m) * (sum_ + lambda_ * temp)
 
         if i % 1000 == 0:
-            print("i: {}, Cost: {}".format(i, calculate_cost(X, y, theta)))
+            print("i: {}, Cost: {}".format(i, calculate_cost(X, y, theta, lambda_)))
 
     return theta
-    
+ 
 def main():
     X, y = load_dataset()
     X = feature_standardization(X)
-    theta = gradient_descent(X, y, 0.001, 10000) 
+    theta = gradient_descent(X, y, 0.001, 10000, 1.0) 
     print("Theta's: {}".format(theta))
 
 if __name__ == "__main__":
     main()
-
